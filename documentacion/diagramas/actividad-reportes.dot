@@ -1,0 +1,17 @@
+digraph G {
+graph [rankdir=TB];node [shape=box,fontname="Arial",fontsize=12];edge [fontname="Arial",fontsize=11];
+s [shape=oval,label="Seleccionar petición y filtros"];
+f [label="Frontend envía consulta HTTP"];
+v [shape=diamond,label="¿Filtros válidos?"];
+e [label="Responder HTTP 400\nMostrar aviso"];
+b [label="Bloquear lectura del estado"];
+r [label="Recorrer facturas\nFiltrar fecha, NIT y dirección"];
+g [label="Agrupar por día o contribuyente\nAcumular cantidades e importes"];
+j [label="Construir Reporte y devolver JSON"];
+p [shape=diamond,label="¿Descargar PDF?"];
+h [label="Mostrar tabla\nDibujar barras en resúmenes"];
+d [label="Paginar datos y gráficas\nGenerar archivo PDF"];
+fin [shape=oval,label="Fin"];
+s -> f -> v; v -> e [label="No"]; e -> fin; v -> b [label="Sí"]; b -> r -> g -> j -> p;
+p -> h [label="No"]; p -> d [label="Sí"]; h -> fin; d -> fin;
+}

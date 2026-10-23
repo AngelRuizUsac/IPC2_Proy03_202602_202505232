@@ -1,0 +1,31 @@
+digraph G {
+graph [rankdir=TB,nodesep=0.3,ranksep=0.35]; node [shape=box,fontname="Arial",fontsize=11]; edge [fontname="Arial",fontsize=10];
+subgraph cluster_rtu {label="Actualizar RTU"; fontname="Arial";
+r0 [shape=oval,label="Recibir arreglo JSON"];
+r1 [label="Bloquear acceso y copiar estado"];
+r2 [shape=diamond,label="¿Quedan registros?"];
+r3 [shape=diamond,label="¿NIT válido?"];
+r4 [shape=diamond,label="¿Ya existe?"];
+r5 [label="Crear contribuyente\nContar nuevo"];
+r6 [label="Actualizar nombre\nContar actualizado"];
+r7 [label="Contar NIT inválido"];
+r8 [label="Guardar copia en archivo\nReemplazar estado en memoria"];
+r9 [shape=oval,label="Responder tres contadores"];
+r0 -> r1 -> r2; r2 -> r3 [label="Sí"]; r2 -> r8 [label="No"]; r3 -> r4 [label="Sí"]; r3 -> r7 [label="No"];
+r4 -> r6 [label="Sí"]; r4 -> r5 [label="No"]; r5 -> r2; r6 -> r2; r7 -> r2; r8 -> r9;
+}
+subgraph cluster_aut {label="Autorizar documentos";fontname="Arial";
+a0 [shape=oval,label="Recibir arreglo JSON"];
+a1 [label="Bloquear y copiar estado\nObtener último correlativo del día"];
+a2 [shape=diamond,label="¿Quedan facturas?"];
+a3 [label="Extraer fecha con Regex\nValidar NIT y RTU\nComprobar valor, IVA, total y referencia"];
+a4 [shape=diamond,label="¿Tiene errores?"];
+a5 [label="Guardar indicadores de rechazo"];
+a6 [label="Incrementar correlativo\nAsignar yyyyMMdd + 8 dígitos\nAgregar a aprobaciones"];
+a7 [label="Añadir intento al historial"];
+a8 [label="Guardar estado completo\nPublicar estado en memoria"];
+a9 [shape=oval,label="Responder contrato JSON"];
+a0 -> a1 -> a2; a2 -> a3 [label="Sí"]; a2 -> a8 [label="No"]; a3 -> a4; a4 -> a5 [label="Sí"]; a4 -> a6 [label="No"];
+a5 -> a7; a6 -> a7; a7 -> a2; a8 -> a9;
+}
+}

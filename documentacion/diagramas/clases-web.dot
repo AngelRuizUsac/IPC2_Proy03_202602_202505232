@@ -1,0 +1,23 @@
+digraph G {
+graph [rankdir=TB, nodesep=0.35, ranksep=0.55]; node [shape=plain,fontname="Arial",fontsize=11]; edge [fontname="Arial",fontsize=10];
+Controlador [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">TributarioController</TD></TR><TR><TD ALIGN="LEFT">+ Rtu(mensaje)<BR ALIGN="LEFT"/>+ Autorizaciones(mensaje)<BR ALIGN="LEFT"/>+ Reportes(...)<BR ALIGN="LEFT"/>+ Inicializar()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+Servicio [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">ServicioTributario</TD></TR><TR><TD ALIGN="LEFT">+ Consultar(...)<BR ALIGN="LEFT"/>+ Autorizar(...)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+Generador [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">GeneradorReportes</TD></TR><TR><TD ALIGN="LEFT">- estado: Estado<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT">+ Generar(...)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+Reporte [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">Reporte</TD></TR><TR><TD ALIGN="LEFT">+ Titulo, Filtro: string<BR ALIGN="LEFT"/>+ Encabezados: string[]<BR ALIGN="LEFT"/>+ Filas: ListaFilas<BR ALIGN="LEFT"/>+ Serie1, Serie2: string<BR ALIGN="LEFT"/>+ Total: decimal<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+ListaFilas [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">ListaFilas</TD></TR><TR><TD ALIGN="LEFT">+ Primero: NodoFila<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT">+ Agregar(dato)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+NodoFila [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">NodoFila</TD></TR><TR><TD ALIGN="LEFT">+ Dato: Fila<BR ALIGN="LEFT"/>+ Siguiente: NodoFila<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+Fila [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">Fila</TD></TR><TR><TD ALIGN="LEFT">+ Etiqueta: string<BR ALIGN="LEFT"/>+ Celdas: string[]<BR ALIGN="LEFT"/>+ Serie1, Serie2: decimal<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+Cliente [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">ClienteApi</TD></TR><TR><TD ALIGN="LEFT">- cliente: HttpClient<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT">+ Enviar(ruta, contenido)<BR ALIGN="LEFT"/>+ Consultar(ruta)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+Enviar [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">EnviarModel</TD></TR><TR><TD ALIGN="LEFT">+ Archivo: IFormFile<BR ALIGN="LEFT"/>+ Tipo, Respuesta, Error: string<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT">+ OnPostAsync()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+Peticiones [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">PeticionesModel</TD></TR><TR><TD ALIGN="LEFT">+ Tipo, Desde, Hasta, Nit, Direccion<BR ALIGN="LEFT"/>+ SinIva: bool<BR ALIGN="LEFT"/>+ Resultado: Reporte<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT">+ OnGetAsync(...)<BR ALIGN="LEFT"/>+ Ancho(valor)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+Inicializar [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">InicializarModel</TD></TR><TR><TD ALIGN="LEFT">+ Confirmar: bool<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT">+ OnPostAsync()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+Pdf [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">GeneradorPdf</TD></TR><TR><TD ALIGN="LEFT">+ Crear(reporte): byte[]<BR ALIGN="LEFT"/></TD></TR></TABLE>>]; Pagina [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">PaginaPdf</TD></TR><TR><TD ALIGN="LEFT">+ Contenido: StringBuilder<BR ALIGN="LEFT"/>+ Siguiente: PaginaPdf<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+Json [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">JsonDatos</TD></TR><TR><TD ALIGN="LEFT">+ Texto(...)<BR ALIGN="LEFT"/>+ Numero(...)<BR ALIGN="LEFT"/>+ Serializar(dato)<BR ALIGN="LEFT"/>+ ReporteJson(reporte)<BR ALIGN="LEFT"/>+ LeerReporte(json)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+Enviar -> Cliente; Peticiones -> Cliente; Inicializar -> Cliente; Cliente -> Controlador [style=dashed,label="HTTP/JSON"];
+Controlador:e -> Servicio:w; Servicio:e -> Generador:w; Generador -> Reporte;
+Reporte -> ListaFilas; ListaFilas:e -> NodoFila:w; NodoFila:e -> Fila:w;
+Peticiones -> Pdf; Pdf -> Pagina [label="0..*"]; Pdf -> Reporte [style=dashed];
+Peticiones -> Json [style=dashed]; Controlador -> Json [style=dashed];
+{rank=same;Controlador;Servicio;Generador;}
+{rank=same;ListaFilas;NodoFila;Fila;}
+}

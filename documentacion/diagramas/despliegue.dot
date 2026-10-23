@@ -1,0 +1,18 @@
+digraph G {
+graph [rankdir=TB,nodesep=0.55,ranksep=0.7]; node [shape=box,fontname="Arial",fontsize=12]; edge [fontname="Arial",fontsize=11];
+n [label="Navegador\nInterfaz del estudiante"];
+p [label="Cliente externo\nPostman / herramienta HTTP"];
+subgraph cluster_equipo {label="Equipo de ejecución - .NET 10 / ASP.NET Core";fontname="Arial";
+f [label="Proceso Frontend\nRazor Pages\nhttp://localhost:5304\nClienteApi + GeneradorPdf"];
+b [label="Proceso Backend\nAPI ASP.NET Core\nhttp://localhost:5303\nControlador + ServicioTributario"];
+d [shape=cylinder,label="Backend/datos/estado.json\nRTU e historial persistente"];
+l [label="instancia.lock\nExclusión de segunda instancia"];
+e [shape=note,label="Frontend/wwwroot/documentacion/Ensayo.pdf"];
+f -> b [label="HTTP / JSON"];
+b -> d [label="Escritura temporal + reemplazo"];
+b -> l [label="Bloqueo de archivo"];
+f -> e [label="Lectura"];
+}
+n -> f [label="HTTP / HTML, SVG y PDF"];
+p -> b [label="HTTP / JSON"];
+}

@@ -1,0 +1,19 @@
+digraph G {
+graph [rankdir=TB, bgcolor="white", nodesep=0.3, ranksep=0.5];
+node [shape=record, fontname="Arial", fontsize=11]; edge [fontname="Arial", fontsize=10];
+Estado [label="{Estado|+ Contribuyentes: ListaContribuyentes\l+ Facturas: ListaFacturas\l|+ Buscar(nit)\l+ Exportar()\l+ Importar(json)\l}"];
+Servicio [label="{ServicioTributario|- estado: Estado\l- repositorio: Repositorio\l- bloqueo: object\l|+ ActualizarRtu(mensaje)\l+ Autorizar(mensaje, recepcion)\l+ Consultar(...)\l+ Inicializar()\l}"];
+Repositorio [label="{Repositorio|- archivo: string\l- bloqueo: FileStream\l|+ Cargar()\l+ Guardar(estado)\l+ Dispose()\l}"];
+Factura [label="{Factura|+ Fecha, Recepcion: DateTime\l+ Referencia, Emisor, Receptor: string\l+ Valor, Iva, Total: decimal\l+ Codigo: long\l+ indicadores de error: bool\l|+ TieneErrores()\l}"];
+Contribuyente [label="{Contribuyente|+ Nit: string\l+ Nombre: string\l}"];
+ListaFacturas [label="{ListaFacturas|+ Primero: NodoFactura\l- ultimo: NodoFactura\l|+ Agregar(dato)\l}"];
+NodoFactura [label="{NodoFactura|+ Dato: Factura\l+ Siguiente: NodoFactura\l}"];
+ListaContribuyentes [label="{ListaContribuyentes|+ Primero: NodoContribuyente\l- ultimo: NodoContribuyente\l|+ Agregar(dato)\l}"];
+NodoContribuyente [label="{NodoContribuyente|+ Dato: Contribuyente\l+ Siguiente: NodoContribuyente\l}"];
+Validador [label="{Validador|+ NitValido(nit)\l+ ExtraerFecha(texto, fecha)\l+ DineroValido(valor)\l}"];
+Servicio -> Estado [label="coordina"]; Servicio -> Repositorio; Servicio -> Validador [style=dashed];
+Estado -> ListaFacturas; Estado -> ListaContribuyentes;
+ListaFacturas -> NodoFactura [label="0..*"]; NodoFactura -> Factura;
+ListaContribuyentes -> NodoContribuyente [label="0..*"]; NodoContribuyente -> Contribuyente;
+Repositorio -> Estado [style=dashed,label="persiste"];
+}

@@ -1,17 +1,57 @@
-# Proyecto 3 — v0.3.0: Interfaz web y reportes
+# Proyecto 3 - Autorización de DTE
 
 Angel Daniel Ruiz Ramos · 202505232 · Sección C
 
-Añade Razor Pages, envío de archivos JSON, consultas, gráficas, PDF de reportes, información del estudiante e inicialización desde la interfaz.
+Solución local completa con frontend **Razor Pages**, backend **API ASP.NET Core**, clases de dominio y almacenamiento persistente en archivos. Es un simulador académico; no se conecta con la SAT.
 
-## Abrir y compilar
+## Abrir en Visual Studio
 
-Requiere SDK .NET 10 y las herramientas de ASP.NET de Visual Studio para las etapas web. Abrir `Proyecto3.sln` o ejecutar `dotnet build Proyecto3.sln -c Release` desde esta carpeta.
+1. Instalar las herramientas de desarrollo web de ASP.NET y un SDK compatible con **.NET 10**. Este destino coincide con el entorno disponible y con el proyecto personal previamente verificado.
+2. Abrir `Proyecto3.sln`.
+3. En las propiedades de la solución, seleccionar **varios proyectos de inicio** y establecer **Iniciar** para Backend y Frontend. Dominio no se ejecuta.
+4. Ejecutar. Frontend: `http://localhost:5304`. API: `http://localhost:5303/api/salud`.
+5. Enviar los archivos de `ejemplos` siguiendo `ejemplos/LEEME.md`.
 
-Abrir `Proyecto3.sln` en Visual Studio y configurar Backend y Frontend como proyectos de inicio. También pueden ejecutarse `dotnet run --project Backend/Backend.csproj` y `dotnet run --project Frontend/Frontend.csproj` en dos terminales. Web: `http://localhost:5304`; API: `http://localhost:5303`.
+## Ejecutar desde dos terminales
 
-## Alcance de esta etapa
+En la carpeta de esta solución, ejecutar cada comando en una terminal distinta:
 
-El ensayo, los diagramas y el registro de pruebas se incorporan en v1.0.0. Ayuda muestra que la documentación académica está pendiente; los PDF de reportes ya funcionan.
+```powershell
+dotnet run --project Backend/Backend.csproj
+```
 
-Esta es una etapa acumulativa preparada el 19 de octubre de 2026 a partir del proyecto completo. No representa un avance fechado en una semana anterior. Consultar RELEASE.md para la descripción que acompaña a esta versión.
+```powershell
+dotnet run --project Frontend/Frontend.csproj
+```
+
+La configuración de la URL del backend está en `Frontend/appsettings.json`. Se puede sobrescribir con la variable `Api__Url`. El almacenamiento predeterminado es `Backend/datos`; `Datos__Carpeta` permite elegir otra carpeta. Detener ambos procesos con Ctrl+C en sus terminales. La sesión de Visual Studio del proyecto 2 no es necesaria.
+
+## Organización
+
+| Carpeta | Responsabilidad |
+|---|---|
+| Dominio | Contribuyente, Factura, listas concretas, validador y contrato interno de reportes |
+| Backend | API HTTP, reglas de negocio, persistencia y consultas |
+| Frontend | Razor Pages, envío de bytes JSON, tablas, SVG y generación PDF |
+| documentacion | Ensayo PDF y Markdown, diagramas, API, manual y revisión de entrega |
+| ejemplos | Archivos de entrada independientes del enunciado |
+| Pruebas | Verificación reproducible de dominio, persistencia y concurrencia |
+
+No hay paquetes NuGet externos, base de datos, JavaScript de aplicación ni dependencia de Graphviz al ejecutar. Bootstrap se incluye localmente con su licencia original. Los diagramas ya están generados; sus fuentes DOT son editables.
+
+La carpeta conserva un repositorio Git local con una confirmación real de esta preparación. No tiene remoto ni releases; ese historial no acredita avances semanales anteriores. El ZIP de distribución contiene los archivos de producto y excluye la carpeta interna `.git`.
+
+## Compilar y verificar
+
+```powershell
+dotnet build Proyecto3.sln -c Release
+dotnet run --project Pruebas/Pruebas.csproj -c Release
+```
+
+Las pruebas usan una carpeta temporal propia y la eliminan al finalizar. No utilizan los datos del backend de uso normal. `Pruebas/verificar_http.py` es una comprobación complementaria con Python 3 y los puertos de prueba 5313/5314; sus instrucciones están en `Pruebas/LEEME.md`.
+
+## Documentación y entrega
+
+El ensayo tiene 5 páginas de contenido y 5 anexos con modelos de clases, actividades y despliegue. Ayuda abre una copia idéntica del PDF. El documento se generó en PDF siguiendo la estructura de la plantilla proporcionada; no es una exportación de Word ni se incluye un DOCX.
+
+Consultar `documentacion/REVISION_ENTREGA.md` antes de publicar. El usuario confirmó que todavía no existe repositorio GitHub. La entrega externa NO está realizada: faltan repositorio, colaborador, releases y UEDI. Un ZIP local no satisface esos requisitos ni acredita cuatro semanas de avances.
