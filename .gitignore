@@ -1,0 +1,8 @@
+bin/
+obj/
+.vs/
+*.user
+Backend/datos/
+*.log
+tmp/
+publicacion/

@@ -1,0 +1,12 @@
+* text=auto eol=lf
+*.pdf binary
+*.png binary
+*.jpg binary
+*.zip binary
+*.cs text eol=lf
+*.cshtml text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.dot text eol=lf
+*.svg text eol=lf
