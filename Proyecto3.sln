@@ -2,6 +2,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{0B12B240-3973-43FD-AE81-4EF6B4513897}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dominio", "Dominio\Dominio.csproj", "{415E7A47-DB9C-4549-AC8C-EDE3D241D61C}"
 EndProject
 Global
@@ -14,6 +16,18 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B12B240-3973-43FD-AE81-4EF6B4513897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B12B240-3973-43FD-AE81-4EF6B4513897}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B12B240-3973-43FD-AE81-4EF6B4513897}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0B12B240-3973-43FD-AE81-4EF6B4513897}.Debug|x64.Build.0 = Debug|Any CPU
+		{0B12B240-3973-43FD-AE81-4EF6B4513897}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0B12B240-3973-43FD-AE81-4EF6B4513897}.Debug|x86.Build.0 = Debug|Any CPU
+		{0B12B240-3973-43FD-AE81-4EF6B4513897}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B12B240-3973-43FD-AE81-4EF6B4513897}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B12B240-3973-43FD-AE81-4EF6B4513897}.Release|x64.ActiveCfg = Release|Any CPU
+		{0B12B240-3973-43FD-AE81-4EF6B4513897}.Release|x64.Build.0 = Release|Any CPU
+		{0B12B240-3973-43FD-AE81-4EF6B4513897}.Release|x86.ActiveCfg = Release|Any CPU
+		{0B12B240-3973-43FD-AE81-4EF6B4513897}.Release|x86.Build.0 = Release|Any CPU
 		{415E7A47-DB9C-4549-AC8C-EDE3D241D61C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{415E7A47-DB9C-4549-AC8C-EDE3D241D61C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{415E7A47-DB9C-4549-AC8C-EDE3D241D61C}.Debug|x64.ActiveCfg = Debug|Any CPU

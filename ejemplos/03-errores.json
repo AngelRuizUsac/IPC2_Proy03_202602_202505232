@@ -1,0 +1,65 @@
+[
+  {
+    "TIEMPO": "Guatemala, 15/01/2025 15:25 hrs.",
+    "REFERENCIA": "A1990",
+    "NIT_EMISOR": "12345679",
+    "NIT_RECEPTOR": "76543218",
+    "VALOR": 100,
+    "IVA": 12,
+    "TOTAL": 112
+  },
+  {
+    "TIEMPO": "Guatemala, 15/01/2025 15:25 hrs.",
+    "REFERENCIA": "ERROR-NIT-E",
+    "NIT_EMISOR": "123",
+    "NIT_RECEPTOR": "76543218",
+    "VALOR": 100,
+    "IVA": 12,
+    "TOTAL": 112
+  },
+  {
+    "TIEMPO": "Guatemala, 15/01/2025 15:25 hrs.",
+    "REFERENCIA": "ERROR-NIT-R",
+    "NIT_EMISOR": "12345679",
+    "NIT_RECEPTOR": "123",
+    "VALOR": 100,
+    "IVA": 12,
+    "TOTAL": 112
+  },
+  {
+    "TIEMPO": "Guatemala, 15/01/2025 15:25 hrs.",
+    "REFERENCIA": "ERROR-RTU-E",
+    "NIT_EMISOR": "9997",
+    "NIT_RECEPTOR": "76543218",
+    "VALOR": 100,
+    "IVA": 12,
+    "TOTAL": 112
+  },
+  {
+    "TIEMPO": "Guatemala, 15/01/2025 15:25 hrs.",
+    "REFERENCIA": "ERROR-RTU-R",
+    "NIT_EMISOR": "12345679",
+    "NIT_RECEPTOR": "9989",
+    "VALOR": 100,
+    "IVA": 12,
+    "TOTAL": 112
+  },
+  {
+    "TIEMPO": "Guatemala, 15/01/2025 15:25 hrs.",
+    "REFERENCIA": "ERROR-IVA",
+    "NIT_EMISOR": "12345679",
+    "NIT_RECEPTOR": "76543218",
+    "VALOR": 100,
+    "IVA": 11,
+    "TOTAL": 111
+  },
+  {
+    "TIEMPO": "Guatemala, 15/01/2025 15:25 hrs.",
+    "REFERENCIA": "ERROR-TOTAL",
+    "NIT_EMISOR": "12345679",
+    "NIT_RECEPTOR": "76543218",
+    "VALOR": 100,
+    "IVA": 12,
+    "TOTAL": 100
+  }
+]
