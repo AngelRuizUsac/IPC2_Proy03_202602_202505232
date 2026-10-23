@@ -1,0 +1,7 @@
+pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+td { overflow-wrap: anywhere; max-width: 24rem; }
+.grafica { max-width: 100%; overflow-x: auto; }
+.grafica svg { min-width: 620px; width: 100%; }
+.barra1 { fill: #0d6efd; }
+.barra2 { fill: #6c757d; }
+.form-control, .form-select { max-width: 42rem; }

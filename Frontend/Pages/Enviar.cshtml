@@ -1,0 +1,25 @@
+@page
+@model EnviarModel
+@{
+    ViewData["Title"] = "Enviar mensaje";
+}
+<h1>Enviar mensaje</h1>
+@if (Model.Error != "")
+{
+    <div class="alert alert-danger" role="alert">@Model.Error</div>
+}
+<form method="post" enctype="multipart/form-data">
+    <label asp-for="Tipo" class="form-label">Tipo de solicitud</label>
+    <select asp-for="Tipo" class="form-select mb-3">
+        <option value="rtu">Actualizar RTU</option>
+        <option value="autorizaciones">Autorizar facturas</option>
+    </select>
+    <label asp-for="Archivo" class="form-label">Archivo JSON</label>
+    <input asp-for="Archivo" type="file" accept=".json,application/json" required class="form-control mb-3" />
+    <button class="btn btn-primary" type="submit">Enviar</button>
+</form>
+@if (Model.Respuesta != "")
+{
+    <h2 class="mt-4">Respuesta</h2>
+    <pre class="border p-3">@Model.Respuesta</pre>
+}

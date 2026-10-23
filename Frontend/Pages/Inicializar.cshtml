@@ -1,0 +1,18 @@
+@page
+@model InicializarModel
+@{
+    ViewData["Title"] = "Inicializar";
+}
+<h1>Inicializar sistema</h1>
+<p>Se eliminarán el RTU, las solicitudes y los correlativos almacenados.</p>
+@if (Model.Aviso != "")
+{
+    <div class="alert alert-info" role="alert">@Model.Aviso</div>
+}
+<form method="post">
+    <div class="form-check mb-3">
+        <input asp-for="Confirmar" class="form-check-input" />
+        <label asp-for="Confirmar" class="form-check-label">Confirmo que deseo eliminar todos los datos.</label>
+    </div>
+    <button class="btn btn-danger" type="submit">Inicializar</button>
+</form>

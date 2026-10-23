@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Proyecto 3</title>
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <nav class="navbar navbar-expand bg-light border-bottom mb-4" aria-label="Navegación principal">
+        <div class="container d-flex flex-wrap gap-3">
+            <a class="navbar-brand" asp-page="/Index">Proyecto 3</a>
+            <a asp-page="/Enviar">Enviar mensaje</a>
+            <a asp-page="/Peticiones">Peticiones</a>
+            <a asp-page="/Ayuda">Ayuda</a>
+            <a asp-page="/Inicializar">Inicializar</a>
+        </div>
+    </nav>
+    <main class="container pb-5">
+        @RenderBody()
+    </main>
+</body>
+</html>

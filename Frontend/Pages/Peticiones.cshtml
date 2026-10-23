@@ -1,0 +1,120 @@
+@page
+@model PeticionesModel
+@using System.Globalization
+@{
+    ViewData["Title"] = "Peticiones";
+}
+<h1>Peticiones</h1>
+<form method="get" class="mb-4">
+    <input type="hidden" name="consultar" value="true" />
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Tipo" class="form-label">Consulta</label>
+            <select asp-for="Tipo" class="form-select">
+                <option value="contribuyente">Consultar contribuyente</option>
+                <option value="facturas">Listado de facturas</option>
+                <option value="iva">Resumen de IVA por fecha y NIT</option>
+                <option value="rango">Resumen por rango de fechas</option>
+                <option value="estadisticas">Estadísticas y errores</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Desde" class="form-label">Desde / fecha de IVA</label>
+            <input asp-for="Desde" type="date" required class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Hasta" class="form-label">Hasta</label>
+            <input asp-for="Hasta" type="date" required class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Nit" class="form-label">NIT del contribuyente</label>
+            <input asp-for="Nit" class="form-control" maxlength="21" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Direccion" class="form-label">Facturas del contribuyente</label>
+            <select asp-for="Direccion" class="form-select">
+                <option value="emitidas">Emitidas</option>
+                <option value="recibidas">Recibidas</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-check my-3">
+        <input asp-for="SinIva" class="form-check-input" />
+        <label asp-for="SinIva" class="form-check-label">Valores sin IVA en el resumen por rango</label>
+    </div>
+    <button class="btn btn-primary" type="submit">Consultar</button>
+</form>
+@if (Model.Error != "")
+{
+    <div class="alert alert-danger" role="alert">@Model.Error</div>
+}
+@if (Model.Resultado != null)
+{
+    Reporte reporte = Model.Resultado;
+    <h2>@reporte.Titulo</h2>
+    <p>@reporte.Filtro</p>
+    <a class="btn btn-outline-secondary mb-3" href="@Model.EnlacePdf">Descargar PDF</a>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    @foreach (string encabezado in reporte.Encabezados)
+                    {
+                        <th scope="col">@encabezado</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    NodoFila? actual = reporte.Filas.Primero;
+                }
+                @while (actual != null)
+                {
+                    <tr>
+                        @foreach (string celda in actual.Dato.Celdas)
+                        {
+                            <td>@celda</td>
+                        }
+                    </tr>
+                    actual = actual.Siguiente;
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (reporte.Filas.Primero == null)
+    {
+        <p>No hay datos para esta consulta.</p>
+    }
+    <p><strong>Total: @reporte.Total.ToString("F2", CultureInfo.InvariantCulture)</strong></p>
+    @if (reporte.Serie1 != "")
+    {
+        <h3>Gráfica</h3>
+        <p><span class="text-primary">Azul: @reporte.Serie1</span>
+        @if (reporte.Serie2 != "")
+        {
+            <span> · Gris: @reporte.Serie2</span>
+        }
+        </p>
+        <div class="grafica">
+        @{
+            NodoFila? punto = reporte.Filas.Primero;
+        }
+        @while (punto != null)
+        {
+            <svg viewBox="0 0 680 72" role="img" aria-label="@(punto.Dato.Etiqueta + ": " + punto.Dato.Serie1 + "; " + punto.Dato.Serie2)">
+                <text x="5" y="28" font-size="14">@punto.Dato.Etiqueta</text>
+                <rect x="185" y="10" width="@Model.Ancho(punto.Dato.Serie1)" height="20" class="barra1" />
+                <text x="555" y="26" font-size="13">@punto.Dato.Serie1.ToString("F2", CultureInfo.InvariantCulture)</text>
+                @if (reporte.Serie2 != "")
+                {
+                    <g>
+                    <rect x="185" y="36" width="@Model.Ancho(punto.Dato.Serie2)" height="20" class="barra2" />
+                    <text x="555" y="52" font-size="13">@punto.Dato.Serie2.ToString("F2", CultureInfo.InvariantCulture)</text>
+                    </g>
+                }
+            </svg>
+            punto = punto.Siguiente;
+        }
+        </div>
+    }
+}
