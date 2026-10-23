@@ -5,7 +5,7 @@
     ViewData["Title"] = "Peticiones";
 }
 <h1>Peticiones</h1>
-<form method="get" class="mb-4">
+<form method="get" class="bloque-formulario mb-4" id="formulario-peticiones">
     <input type="hidden" name="consultar" value="true" />
     <div class="row g-3">
         <div class="col-md-6">
@@ -19,7 +19,7 @@
             </select>
         </div>
         <div class="col-md-3">
-            <label asp-for="Desde" class="form-label">Desde / fecha de IVA</label>
+            <label asp-for="Desde" class="form-label" id="etiqueta-fecha">Desde / fecha de IVA</label>
             <input asp-for="Desde" type="date" required class="form-control" />
         </div>
         <div class="col-md-3">
@@ -42,7 +42,7 @@
         <input asp-for="SinIva" class="form-check-input" />
         <label asp-for="SinIva" class="form-check-label">Valores sin IVA en el resumen por rango</label>
     </div>
-    <button class="btn btn-primary" type="submit">Consultar</button>
+    <button class="btn btn-primary mt-3" type="submit">Consultar</button>
 </form>
 @if (Model.Error != "")
 {
@@ -51,6 +51,7 @@
 @if (Model.Resultado != null)
 {
     Reporte reporte = Model.Resultado;
+    <section class="bloque-resultado" aria-label="Resultado de la consulta">
     <h2>@reporte.Titulo</h2>
     <p>@reporte.Filtro</p>
     <a class="btn btn-outline-secondary mb-3" href="@Model.EnlacePdf">Descargar PDF</a>
@@ -85,10 +86,10 @@
     {
         <p>No hay datos para esta consulta.</p>
     }
-    <p><strong>Total: @reporte.Total.ToString("F2", CultureInfo.InvariantCulture)</strong></p>
+    <p class="total-reporte"><strong>Total: @reporte.Total.ToString("F2", CultureInfo.InvariantCulture)</strong></p>
     @if (reporte.Serie1 != "")
     {
-        <h3>Gráfica</h3>
+        <h3 class="mt-4">Gráfica</h3>
         <p><span class="text-primary">Azul: @reporte.Serie1</span>
         @if (reporte.Serie2 != "")
         {
@@ -117,4 +118,5 @@
         }
         </div>
     }
+    </section>
 }

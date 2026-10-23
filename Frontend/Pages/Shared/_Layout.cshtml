@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - Proyecto 3</title>
     <link rel="stylesheet" href="~/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <nav class="navbar navbar-expand bg-light border-bottom mb-4" aria-label="Navegación principal">
+    <nav class="navbar navbar-expand border-bottom mb-4 navegacion" aria-label="Navegación principal">
         <div class="container d-flex flex-wrap gap-3">
             <a class="navbar-brand" asp-page="/Index">Proyecto 3</a>
             <a asp-page="/Enviar">Enviar mensaje</a>
@@ -20,5 +20,6 @@
     <main class="container pb-5">
         @RenderBody()
     </main>
+    <script src="~/js/interfaz.js" asp-append-version="true" defer></script>
 </body>
 </html>

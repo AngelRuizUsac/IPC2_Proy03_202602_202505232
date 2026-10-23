@@ -1,7 +1,126 @@
-pre { white-space: pre-wrap; overflow-wrap: anywhere; }
-td { overflow-wrap: anywhere; max-width: 24rem; }
-.grafica { max-width: 100%; overflow-x: auto; }
-.grafica svg { min-width: 620px; width: 100%; }
-.barra1 { fill: #0d6efd; }
-.barra2 { fill: #6c757d; }
-.form-control, .form-select { max-width: 42rem; }
+body {
+    background: #fff;
+    color: #212529;
+}
+
+.navegacion {
+    padding: 14px 0;
+}
+
+.navegacion a.activo {
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid #0d6efd;
+    padding-bottom: 5px;
+}
+
+main {
+    padding-top: 12px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 24px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+}
+
+h3 {
+    font-size: 1.25rem;
+}
+
+.enlaces-inicio {
+    list-style: none;
+    padding: 0;
+    max-width: 700px;
+}
+
+.enlaces-inicio li {
+    border-bottom: 1px solid #dee2e6;
+    padding: 14px 0;
+}
+
+.enlaces-inicio a {
+    text-decoration: none;
+}
+
+.bloque-formulario {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 24px;
+}
+
+.bloque-resultado {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 24px;
+}
+
+.seccion-ayuda {
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+.table th {
+    background: #e9ecef;
+}
+
+td {
+    overflow-wrap: anywhere;
+    max-width: 24rem;
+}
+
+.grafica {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.grafica svg {
+    min-width: 620px;
+    width: 100%;
+}
+
+.barra1 {
+    fill: #0d6efd;
+}
+
+.barra2 {
+    fill: #6c757d;
+}
+
+.form-control,
+.form-select {
+    max-width: 42rem;
+}
+
+#formulario-peticiones .form-control,
+#formulario-peticiones .form-select {
+    max-width: none;
+}
+
+@media (max-width: 600px) {
+    .bloque-formulario,
+    .bloque-resultado {
+        padding: 16px;
+    }
+
+    .navegacion a {
+        font-size: 14px;
+    }
+}
