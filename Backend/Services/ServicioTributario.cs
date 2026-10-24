@@ -186,6 +186,14 @@ namespace proyecto3.Backend.Services
             return Encoding.UTF8.GetString(memoria.ToArray());
         }
 
+        public string ConsultarDatosActuales()
+        {
+            lock (bloqueo)
+            {
+                return estado.Exportar();
+            }
+        }
+
         public void Inicializar()
         {
             lock (bloqueo)

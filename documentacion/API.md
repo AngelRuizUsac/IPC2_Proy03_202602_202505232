@@ -76,3 +76,7 @@ Los reportes devuelven `titulo`, `filtro`, `serie1`, `serie2`, `total`, `encabez
 - Una sola instancia escribe en cada carpeta de datos. No se promete coordinación distribuida ni recuperación automática de un archivo corrupto.
 
 La API de demostración no incorpora autenticación, porque el enunciado no define usuarios. El acceso público a Internet requiere configurar alojamiento, HTTPS y control de acceso antes de exponer operaciones como inicializar; la entrega local no constituye un despliegue público.
+
+## Consulta de datos actuales
+
+`GET /api/datos` devuelve una instantánea completa bajo el bloqueo del servicio, con `version`, `contribuyentes` y `facturas`. Incluye solicitudes aprobadas y rechazadas, con todas las propiedades guardadas de Contribuyente y Factura. No aplica filtros ni modifica el almacenamiento. El frontend la presenta en `/Datos` con listas enlazadas propias. No hay un historial persistido de consultas de reportes ni de los lotes HTTP originales; se muestran los registros de autorización conservados. La fecha registrada es el valor almacenado: cuando la fecha original fue inválida, el procesamiento existente usó la recepción como alternativa y marcó FormatoIncorrecto.

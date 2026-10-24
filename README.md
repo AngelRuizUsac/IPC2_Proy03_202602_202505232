@@ -55,3 +55,7 @@ Las pruebas usan una carpeta temporal propia y la eliminan al finalizar. No util
 El ensayo tiene 7 páginas con los cinco diagramas de clases, actividades y despliegue integrados junto a sus explicaciones, sin anexos separados. Ayuda abre una copia idéntica del PDF. El documento se generó en PDF siguiendo la estructura de la plantilla proporcionada; no es una exportación de Word ni se incluye un DOCX.
 
 Consultar `documentacion/REVISION_ENTREGA.md` antes de publicar. El usuario confirmó que todavía no existe repositorio GitHub. La entrega externa NO está realizada: faltan repositorio, colaborador, releases y UEDI. Un ZIP local no satisface esos requisitos ni acredita cuatro semanas de avances.
+
+## Datos actuales
+
+La opción Datos actuales muestra todos los contribuyentes y todas las solicitudes de autorización guardadas, aprobadas y rechazadas, sin filtros de fecha o NIT. Incluye importes, fechas, códigos y motivos de rechazo; Actualizar vuelve a consultar el backend. No almacena historial de consultas de reportes ni recupera datos eliminados mediante Inicializar.

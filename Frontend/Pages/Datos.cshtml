@@ -1,0 +1,101 @@
+@page
+@model DatosModel
+@{
+    ViewData["Title"] = "Datos actuales";
+}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <h1 class="mb-0">Datos actuales</h1>
+    <a class="btn btn-outline-primary" asp-page="/Datos">Actualizar</a>
+</div>
+@if (Model.Error != "")
+{
+    <div class="alert alert-danger" role="alert">@Model.Error</div>
+}
+else
+{
+    <p>Contribuyentes: <strong>@Model.CantidadContribuyentes</strong> · Solicitudes: <strong>@(Model.Aprobadas + Model.Rechazadas)</strong> · Aprobadas: <strong>@Model.Aprobadas</strong> · Rechazadas: <strong>@Model.Rechazadas</strong></p>
+    <p><a href="#contribuyentes">Contribuyentes</a> · <a href="#facturas">Facturas y solicitudes de autorización</a></p>
+    <section class="bloque-resultado mb-4" id="contribuyentes">
+        <h2>Contribuyentes registrados</h2>
+        @if (Model.Contribuyentes.Primero == null)
+        {
+            <p>No hay contribuyentes registrados.</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered tabla-datos">
+                    <thead><tr><th scope="col">NIT</th><th scope="col">Nombre</th></tr></thead>
+                    <tbody>
+                        @{ NodoContribuyente? contribuyente = Model.Contribuyentes.Primero; }
+                        @while (contribuyente != null)
+                        {
+                            <tr><td>@contribuyente.Dato.Nit</td><td>@contribuyente.Dato.Nombre</td></tr>
+                            contribuyente = contribuyente.Siguiente;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+    <section class="bloque-resultado" id="facturas">
+        <h2>Facturas y solicitudes de autorización</h2>
+        <p>Todos los registros guardados, incluidas las solicitudes rechazadas. Las consultas de reportes no se guardan como historial.</p>
+        @if (Model.Facturas.Primero == null)
+        {
+            <p>No hay facturas ni solicitudes guardadas.</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered tabla-datos">
+                    <thead>
+                        <tr>
+                            <th scope="col">Referencia</th>
+                            <th scope="col">Fecha registrada</th>
+                            <th scope="col">Recepción (Guatemala)</th>
+                            <th scope="col">NIT emisor</th>
+                            <th scope="col">NIT receptor</th>
+                            <th scope="col">Valor</th>
+                            <th scope="col">IVA</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Resultado</th>
+                            <th scope="col">Código de aprobación</th>
+                            <th scope="col">Motivos de rechazo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ NodoFactura? actual = Model.Facturas.Primero; }
+                        @while (actual != null)
+                        {
+                            Factura factura = actual.Dato;
+                            <tr>
+                                <td>@factura.Referencia</td>
+                                <td>@factura.Fecha.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                <td>@factura.Recepcion.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                <td>@factura.Emisor</td>
+                                <td>@factura.Receptor</td>
+                                <td>@factura.Valor.ToString("0.00")</td>
+                                <td>@factura.Iva.ToString("0.00")</td>
+                                <td>@factura.Total.ToString("0.00")</td>
+                                @if (factura.TieneErrores())
+                                {
+                                    <td>Rechazada</td>
+                                    <td>—</td>
+                                    <td>@Model.Motivos(factura)</td>
+                                }
+                                else
+                                {
+                                    <td>Aprobada</td>
+                                    <td>@factura.Codigo</td>
+                                    <td>—</td>
+                                }
+                            </tr>
+                            actual = actual.Siguiente;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+}

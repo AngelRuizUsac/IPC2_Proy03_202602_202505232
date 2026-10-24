@@ -43,6 +43,12 @@ namespace proyecto3.Backend.Controllers
             return Content(servicio.Autorizar(mensaje, ServicioTributario.Ahora()), "application/json");
         }
 
+        [HttpGet("datos")]
+        public IActionResult Datos()
+        {
+            return Content(servicio.ConsultarDatosActuales(), "application/json");
+        }
+
         [HttpPost("inicializar")]
         public IActionResult Inicializar()
         {

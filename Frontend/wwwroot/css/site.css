@@ -124,3 +124,12 @@ td {
         font-size: 14px;
     }
 }
+
+.tabla-datos td {
+    white-space: nowrap;
+}
+
+#facturas .tabla-datos td:last-child {
+    white-space: normal;
+    min-width: 12rem;
+}
