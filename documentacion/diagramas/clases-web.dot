@@ -11,12 +11,12 @@ Cliente [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"
 Enviar [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">EnviarModel</TD></TR><TR><TD ALIGN="LEFT">+ Archivo: IFormFile<BR ALIGN="LEFT"/>+ Tipo, Respuesta, Error: string<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT">+ OnPostAsync()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
 Peticiones [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">PeticionesModel</TD></TR><TR><TD ALIGN="LEFT">+ Tipo, Desde, Hasta, Nit, Direccion<BR ALIGN="LEFT"/>+ SinIva: bool<BR ALIGN="LEFT"/>+ Resultado: Reporte<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT">+ OnGetAsync(...)<BR ALIGN="LEFT"/>+ Ancho(valor)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
 Inicializar [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">InicializarModel</TD></TR><TR><TD ALIGN="LEFT">+ Confirmar: bool<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT">+ OnPostAsync()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
-Pdf [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">GeneradorPdf</TD></TR><TR><TD ALIGN="LEFT">+ Crear(reporte): byte[]<BR ALIGN="LEFT"/></TD></TR></TABLE>>]; Pagina [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">PaginaPdf</TD></TR><TR><TD ALIGN="LEFT">+ Contenido: StringBuilder<BR ALIGN="LEFT"/>+ Siguiente: PaginaPdf<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+Pdf [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">GeneradorPdf</TD></TR><TR><TD ALIGN="LEFT">+ Crear(reporte): byte[]<BR ALIGN="LEFT"/></TD></TR></TABLE>>]; Pagina [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">FuentePdf</TD></TR><TR><TD ALIGN="LEFT">+ ResolveTypeface(...)<BR ALIGN="LEFT"/>+ Siguiente: FuentePdf<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
 Json [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD ALIGN="LEFT">JsonDatos</TD></TR><TR><TD ALIGN="LEFT">+ Texto(...)<BR ALIGN="LEFT"/>+ Numero(...)<BR ALIGN="LEFT"/>+ Serializar(dato)<BR ALIGN="LEFT"/>+ ReporteJson(reporte)<BR ALIGN="LEFT"/>+ LeerReporte(json)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
 Enviar -> Cliente; Peticiones -> Cliente; Inicializar -> Cliente; Cliente -> Controlador [style=dashed,label="HTTP/JSON"];
 Controlador:e -> Servicio:w; Servicio:e -> Generador:w; Generador -> Reporte;
 Reporte -> ListaFilas; ListaFilas:e -> NodoFila:w; NodoFila:e -> Fila:w;
-Peticiones -> Pdf; Pdf -> Pagina [label="0..*"]; Pdf -> Reporte [style=dashed];
+Peticiones -> Pdf; Pdf -> Pagina [label="fuente"]; Pdf -> Reporte [style=dashed];
 Peticiones -> Json [style=dashed]; Controlador -> Json [style=dashed];
 {rank=same;Controlador;Servicio;Generador;}
 {rank=same;ListaFilas;NodoFila;Fila;}

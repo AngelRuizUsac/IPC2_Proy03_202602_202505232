@@ -37,7 +37,7 @@ La configuración de la URL del backend está en `Frontend/appsettings.json`. Se
 | ejemplos | Archivos de entrada independientes del enunciado |
 | Pruebas | Verificación reproducible de dominio, persistencia y concurrencia |
 
-No hay paquetes NuGet externos, base de datos, JavaScript de aplicación ni dependencia de Graphviz al ejecutar. Bootstrap se incluye localmente con su licencia original. Los diagramas ya están generados; sus fuentes DOT son editables.
+Los reportes PDF utilizan PDFsharp 6.2.4 (MIT), restaurado con NuGet, y una fuente Unicode incluida con licencia SIL OFL. La primera compilación requiere acceso a NuGet. Hay JavaScript local para navegación y filtros; no se usa base de datos ni Graphviz al ejecutar. Bootstrap se incluye localmente con su licencia original. Los diagramas ya están generados; sus fuentes DOT son editables.
 
 La carpeta conserva un repositorio Git local con una confirmación real de esta preparación. No tiene remoto ni releases; ese historial no acredita avances semanales anteriores. El ZIP de distribución contiene los archivos de producto y excluye la carpeta interna `.git`.
 
@@ -52,6 +52,6 @@ Las pruebas usan una carpeta temporal propia y la eliminan al finalizar. No util
 
 ## Documentación y entrega
 
-El ensayo tiene 5 páginas de contenido y 5 anexos con modelos de clases, actividades y despliegue. Ayuda abre una copia idéntica del PDF. El documento se generó en PDF siguiendo la estructura de la plantilla proporcionada; no es una exportación de Word ni se incluye un DOCX.
+El ensayo tiene 7 páginas con los cinco diagramas de clases, actividades y despliegue integrados junto a sus explicaciones, sin anexos separados. Ayuda abre una copia idéntica del PDF. El documento se generó en PDF siguiendo la estructura de la plantilla proporcionada; no es una exportación de Word ni se incluye un DOCX.
 
 Consultar `documentacion/REVISION_ENTREGA.md` antes de publicar. El usuario confirmó que todavía no existe repositorio GitHub. La entrega externa NO está realizada: faltan repositorio, colaborador, releases y UEDI. Un ZIP local no satisface esos requisitos ni acredita cuatro semanas de avances.

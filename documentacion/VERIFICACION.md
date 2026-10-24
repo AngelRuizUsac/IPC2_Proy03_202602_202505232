@@ -1,6 +1,6 @@
 # Verificación ejecutada
 
-Preparación local del 18 y 19 de octubre de 2026. Entorno: Windows, SDK .NET 10.0.401, compilación Release.
+Verificación local repetida el 23 de octubre de 2026 tras las correcciones autorizadas. Entorno: Windows, SDK .NET 10.0.401, compilación Release.
 
 | Comprobación | Resultado |
 |---|---|
@@ -9,7 +9,8 @@ Preparación local del 18 y 19 de octubre de 2026. Entorno: Windows, SDK .NET 10
 | API y frontend por HTTP | 70 comprobaciones correctas |
 | Formularios multipart y protección | 12 comprobaciones correctas |
 | Publicación y reinicios reales de proceso | 10 comprobaciones correctas |
-| Ensayo PDF | 10 páginas: 5 de contenido y 5 anexos; revisión visual de todas |
+| Casos adicionales y regresión Unicode | 24 de 24 correctos |
+| Ensayo PDF | 7 páginas con cinco diagramas dentro del desarrollo; revisión visual de todas |
 | PDF de Ayuda | Mismo SHA-256 que documentacion/Ensayo.pdf, también en publicación |
 | Navegador | Revisión de formulario, tabla y gráfica de IVA a ancho reducido |
 
@@ -31,7 +32,7 @@ Preparación local del 18 y 19 de octubre de 2026. Entorno: Windows, SDK .NET 10
 
 ## Límites de estos resultados
 
-No son pruebas exhaustivas, de carga masiva, de fallos de hardware ni de despliegue distribuido. El proyecto se ejecutó localmente; no se publicó en Internet. El backend trabaja con una sola instancia por carpeta de datos. El generador de PDF de reportes usa la fuente estándar Helvetica y codificación Latin-1, adecuada para español; caracteres fuera de ese repertorio no tienen cobertura completa en esa exportación. JSON y las vistas conservan Unicode.
+No son pruebas exhaustivas, de carga masiva, de fallos de hardware ni de despliegue distribuido. El proyecto se ejecutó localmente; no se publicó en Internet. El backend trabaja con una sola instancia por carpeta de datos. El generador PDF usa PDFsharp 6.2.4 y una fuente derivada de Noto Sans SC incluida en el ensamblado. Se verificó por extracción y visualmente que conserva Muñoz – 東京 €. La cobertura depende de los glifos de esa fuente: no se afirma soporte de todos los alfabetos, emojis o composición tipográfica compleja. JSON y las vistas conservan Unicode.
 
 Los archivos de prueba se mantuvieron en carpetas temporales separadas. Los resultados de proyecto 2 y práctica 3 no se reutilizan como evidencia de este proyecto.
 

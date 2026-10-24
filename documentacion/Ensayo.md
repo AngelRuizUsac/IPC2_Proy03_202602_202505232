@@ -18,57 +18,73 @@ Keywords: Authorization, persistence, validation, traceability, concurrency.
 
 Autorizar un documento electrónico requiere relacionar reglas de negocio con mecanismos que preserven los resultados. El Proyecto 3 plantea un servicio HTTP que recibe mensajes JSON, verifica datos tributarios y produce consultas desde una aplicación web (Universidad de San Carlos de Guatemala, 2026b). Este ensayo analiza cómo distribuir esas responsabilidades mediante programación orientada a objetos en C#. Su propósito es explicar por qué la validación, la asignación de correlativos y la persistencia deben formar una operación coordinada. También examina la diferencia entre la fecha declarada en una factura y el momento de recepción, así como sus efectos en los reportes. La exposición parte de la arquitectura, desarrolla los algoritmos principales y concluye con sus alcances y límites.
 
-## Desarrollo del tema
+## Desarrollo: objetos y estructuras propias
 
-## Separación de responsabilidades
+Contribuyente representa el NIT y el nombre del registro tributario. Factura conserva fecha, recepción, referencia, participantes, importes, autorización e indicadores de error. Estado reúne dos listas enlazadas concretas y ofrece la búsqueda de contribuyentes. Los nodos contienen una referencia al dato y otra al siguiente nodo. La separación permite recorrer el historial sin mezclar los enlaces con las propiedades tributarias. Las clases de dominio no requieren colecciones genéricas ni consultas LINQ.
+
+ServicioTributario coordina las modificaciones y Repositorio conserva el estado en archivos. La figura 1 relaciona los datos, sus nodos, las listas y los servicios. Buscar un NIT recorre hasta c contribuyentes; verificar una referencia recorre hasta f solicitudes. Estas operaciones son secuenciales: no se afirma rendimiento logarítmico ni procesamiento masivo.
+
+![Figura 1. Modelo de dominio y persistencia.](diagramas/clases.png)
+
+Figura 1. Modelo de dominio y persistencia. Fuente: elaboración para esta implementación.
+
+## Comunicación entre frontend y backend
 
 La solución utiliza dos procesos. El frontend contiene páginas Razor para seleccionar archivos, consultar información, descargar reportes y acceder a la documentación. El backend expone una API que puede recibir solicitudes de ese frontend o de un cliente externo. Esta separación permite comprobar las operaciones sin depender de controles visuales. El contrato HTTP constituye el punto de encuentro entre ambas aplicaciones y evita que la interfaz modifique directamente los archivos persistentes.
 
 El envío de un archivo conserva los bytes recibidos. La aplicación web no agrega propiedades ni reconstruye el mensaje antes de transmitirlo. La API interpreta el arreglo JSON y devuelve los nombres de campos establecidos en el enunciado. Esta decisión mantiene la independencia del cliente: una solicitud enviada desde una herramienta HTTP tiene el mismo procesamiento que una solicitud enviada desde la página web. Los errores de estructura JSON se diferencian de los errores de negocio de cada factura.
 
-## Objetos y estructuras concretas
+Las páginas Razor reciben ClienteApi y consumen los reportes mediante HTTP. GeneradorPdf utiliza PDFsharp y FuentePdf resuelve una fuente incluida en el proyecto, que permite conservar los caracteres cubiertos por ella al exportar. El diagrama de la figura 2 muestra las clases que intercambian y representan la información.
 
-Contribuyente representa el NIT y el nombre del registro tributario. Factura conserva fecha, recepción, referencia, participantes, importes, autorización e indicadores de error. Estado reúne dos listas enlazadas concretas y ofrece la búsqueda de contribuyentes. Los nodos contienen una referencia al dato y otra al siguiente nodo. La separación permite recorrer el historial sin mezclar los enlaces con las propiedades tributarias. Las clases de dominio no requieren colecciones genéricas ni consultas LINQ.
+Compartir tipos de reporte no implica compartir el estado. El backend conserva las listas y aplica las reglas; el frontend recibe JSON y produce tablas, gráficas y archivos PDF. Las estructuras de dominio siguen siendo listas enlazadas propias.
 
-ServicioTributario coordina las operaciones que modifican el estado. Repositorio carga y guarda el archivo; GeneradorReportes interpreta los datos para cada consulta. Las páginas reciben un ClienteApi, mientras GeneradorPdf transforma el reporte recibido en un documento. Estas responsabilidades se muestran en los diagramas de clases de los anexos. Compartir los tipos de reporte no significa compartir el estado: los dos programas siguen intercambiando información mediante HTTP.
+![Figura 2. Clases de comunicación y reportes.](diagramas/clases-web.png)
 
-## Costo de los recorridos
+Figura 2. Clases de comunicación y reportes. Fuente: elaboración para esta implementación.
 
-Una lista enlazada facilita conservar registros e insertar al final. La búsqueda de un NIT requiere recorrer hasta c contribuyentes. Verificar referencias puede recorrer f solicitudes previas. Por ello, la autorización de lotes grandes puede implicar recorridos repetidos. Se acepta este costo para mantener una estructura cercana a los trabajos anteriores. No se afirma un tiempo logarítmico ni se presenta la implementación como una plataforma de procesamiento masivo.
+## Validación y autorización de documentos
 
-## Validación del mensaje
+Una expresión regular extrae la fecha de TIEMPO y la conversión de calendario comprueba día y hora. Se ignoran nombres de lugares y sufijos. El NIT conserva ceros iniciales y hasta veinte dígitos previos al verificador; los pesos empiezan en dos desde la derecha. El módulo once determina el verificador y el resultado diez corresponde a K.
 
-La extracción de fecha utiliza una expresión regular que identifica el segmento día, mes, año, hora y minuto dentro de TIEMPO. Después se comprueba que corresponda a una fecha real con horas entre cero y veintitrés. Nombres de lugares y sufijos como hrs. se ignoran. La expresión regular selecciona el contenido relevante; la conversión de calendario evita aceptar fechas imposibles. Si no existe una fecha válida, la solicitud queda rechazada y se contabiliza con su fecha de recepción.
+Los importes se procesan como decimal: VALOR debe ser positivo y tener precisión de centavos. El IVA esperado es el 12 % redondeado a dos posiciones; TOTAL debe ser VALOR más IVA. La referencia admite hasta cuarenta caracteres y no se reutiliza, incluso después de un rechazo o reinicio.
 
-El NIT se conserva como texto para no perder ceros iniciales y admitir hasta veinte dígitos anteriores al verificador. El cálculo comienza en el dígito situado a la izquierda del verificador, con peso dos, y aumenta hacia la izquierda. Se obtiene el módulo once de la suma y se aplica la regla indicada por el enunciado. Un resultado diez corresponde a K. La validación matemática precede a la búsqueda en el RTU; un NIT inválido y uno válido inexistente representan causas distintas.
+La figura 3 muestra el alta o actualización del RTU y la autorización. Cada factura puede acumular varias causas de rechazo. Los NIT inválidos no modifican el RTU; los válidos existentes actualizan el nombre y los nuevos se incorporan.
 
-## Importes y referencias
+El código une la fecha de recepción en Guatemala con ocho dígitos de correlativo. Solo las aprobaciones incrementan la secuencia. TIEMPO determina la fecha de los reportes. La respuesta conserva los campos obligatorios; los demás errores se consultan en las estadísticas.
 
-Los importes se trabajan con decimal. El valor debe ser positivo y representable con dos decimales; IVA y TOTAL no pueden ser negativos. El IVA esperado se calcula multiplicando el valor por 0.12 y redondeando a dos posiciones. Se emplea redondeo de mitades alejándose de cero. El total esperado se obtiene sumando el valor y el IVA recibido. Ambas comprobaciones son independientes, por lo que una misma solicitud puede acumular más de un error.
+![Figura 3. Actividades de actualización del RTU y autorización.](diagramas/actividades.png)
 
-La referencia distingue mayúsculas y minúsculas y admite hasta cuarenta posiciones. Se impide reutilizar una referencia registrada, incluso si la solicitud anterior fue rechazada, se recibió en otro día o precede a un reinicio. Una solicitud corregida debe utilizar una nueva referencia. Esta interpretación aplica la unicidad a todo el historial recibido, porque el enunciado no limita expresamente la regla a documentos aprobados. La referencia vacía produce un error de formato y no se considera una clave válida.
+Figura 3. Actividades de actualización del RTU y autorización. Fuente: elaboración para esta implementación.
 
-## Autorización y fecha de recepción
+## Persistencia y despliegue
 
-El código concatena la fecha de recepción en Guatemala con un correlativo de ocho posiciones. Se consulta el mayor correlativo almacenado para ese día y se incrementa únicamente cuando la factura es aprobada. La fecha declarada en TIEMPO sirve para agrupar los movimientos en los reportes. Así, una factura fechada en enero y recibida en octubre conserva enero en las consultas y octubre en su autorización. Separar ambos campos evita que mensajes antiguos reinicien la secuencia actual.
+El backend carga estado.json al iniciar. Cada modificación se aplica sobre una copia del estado; luego escribe un archivo temporal, reemplaza el archivo definitivo y publica la copia en memoria. Si falla la escritura, no se anuncia éxito y permanece el estado anterior.
 
-Las respuestas de autorización conservan los cuatro campos del objeto resultadoAutorizaciones, incluida la lista detalleAprobaciones. Los siete tipos de errores solicitados se consultan en las estadísticas; no se agregan campos al contrato de respuesta obligatorio. Las cantidades de errores no equivalen necesariamente a la cantidad de facturas rechazadas, porque una factura puede incumplir varias reglas. El reporte también conserva un contador de formato incorrecto para explicar rechazos que no pertenecen a las siete categorías enumeradas.
+El historial conserva el RTU, las referencias y los correlativos. Un bloqueo serializa las operaciones; un archivo exclusivo impide que otro backend utilice la misma carpeta. Estas medidas protegen una instancia local, sin prometer coordinación distribuida.
 
-## Persistencia y coherencia
+La figura 4 ubica los dos procesos, el navegador y los archivos. Un cliente externo puede consumir la misma API. La operación Inicializar guarda un estado vacío; un archivo corrupto provoca un fallo de inicio en lugar de borrarse silenciosamente.
 
-El archivo estado.json contiene el RTU y todas las solicitudes procesadas. El backend lo carga al iniciar. Para modificarlo, el servicio copia el estado, aplica la operación a esa copia, escribe un archivo temporal y reemplaza el archivo definitivo. Solo después publica la copia como estado vigente en memoria. Si la escritura falla, la respuesta no anuncia éxito y el estado anterior permanece disponible. Esta secuencia reduce la posibilidad de comunicar una autorización que solo exista en memoria.
+El frontend sirve el ensayo y genera los PDF con la fuente empaquetada. La biblioteca PDFsharp se restaura con NuGet al compilar; durante la ejecución no se necesita descargar fuentes. Los datos de prueba usan carpetas independientes de los datos normales.
 
-Un bloqueo de acceso serializa las operaciones de la instancia. De esta manera, dos solicitudes concurrentes no leen el mismo correlativo y lo asignan simultáneamente. Un archivo de bloqueo exclusivo impide iniciar un segundo backend sobre la misma carpeta de datos. Esta protección corresponde a una aplicación de una instancia y no constituye un mecanismo distribuido. La escritura temporal y el reemplazo se realizan en la misma carpeta para conservar la operación dentro del mismo sistema de archivos.
+![Figura 4. Despliegue local y almacenamiento.](diagramas/despliegue.png)
 
-Persistir las facturas permite reconstruir el correlativo máximo de cada día sin un contador separado que pueda quedar desincronizado. También preserva las referencias utilizadas y los motivos de rechazo. Cuando un archivo existente está corrupto, el servicio no lo sustituye silenciosamente por un estado vacío: el inicio falla y requiere revisar el almacenamiento. El borrado explícito ocurre únicamente mediante la operación de inicialización, que también guarda de forma persistente el estado vacío.
+Figura 4. Despliegue local y almacenamiento. Fuente: elaboración para esta implementación.
 
-## Consultas y representación
+## Consultas, gráficas y exportación
 
-El reporte de contribuyente distingue facturas emitidas y recibidas, agrupa por fecha y calcula cantidades autorizadas y total facturado. El listado complementario muestra los documentos individuales con referencia, emisor, receptor, valor, IVA, total y código. El resumen de IVA acumula por contribuyente el impuesto emitido y recibido en una fecha. Un documento con el mismo NIT en ambos extremos participa en ambas columnas, porque representa dos perspectivas del mismo movimiento.
+El reporte de contribuyente distingue facturas emitidas y recibidas y agrupa las autorizaciones por fecha. Presenta cantidad diaria, monto y total del rango. El listado complementario conserva referencia, participantes, importes y código de autorización.
 
-El resumen por rango ofrece total con IVA o valor sin IVA. Las gráficas utilizan barras cuya longitud corresponde al importe y cuyo valor numérico también aparece escrito. Los reportes PDF incluyen los filtros, los datos, el total y las gráficas correspondientes. La paginación evita que las consultas extensas queden cortadas. Las estadísticas reúnen todos los intentos, incluidos los rechazados; los reportes monetarios consideran únicamente facturas autorizadas.
+El resumen de IVA calcula el impuesto emitido y recibido por cada NIT en una fecha. Cuando el contribuyente ocupa ambos extremos, participa en ambas columnas. El resumen por rango permite elegir total con IVA o valor sin IVA.
 
-La cantidad de emisores y receptores distintos en las estadísticas se obtiene sobre los identificadores no vacíos recibidos, incluso cuando presentan errores. Esa elección permite describir el contenido de las solicitudes, mientras las consultas monetarias describen documentos aprobados. Las fechas sin movimientos se muestran con cero dentro del rango. Exponer estas convenciones evita interpretar las cifras como si todos los reportes utilizaran el mismo universo de datos.
+Las gráficas utilizan barras y valores numéricos. El PDF incluye filtros, resultados, totales y las gráficas correspondientes. La figura 5 describe cómo el backend filtra y agrupa los datos y cómo el frontend los presenta o exporta.
+
+Las estadísticas cuentan todos los intentos, incluidos los rechazados; los montos usan únicamente aprobaciones. Una factura puede tener varios errores, por lo que sumar causas no determina el número de rechazos.
+
+Los participantes distintos se cuentan entre identificadores no vacíos de todos los intentos. Las fechas sin movimientos aparecen con cero. Estas convenciones se documentan para distinguir el universo de cada reporte.
+
+![Figura 5](diagramas/actividad-reportes.png)
+
+Figura 5. Actividad de consulta y exportación. Fuente: elaboración para esta implementación.
 
 ## Verificación y alcance
 
@@ -89,33 +105,3 @@ Las estadísticas adquieren significado cuando se explican sus criterios. La fec
 Universidad de San Carlos de Guatemala. (2026a). Formato de artículo o ensayo del laboratorio de Introducción a la Programación y Computación 2 [Plantilla del curso].
 
 Universidad de San Carlos de Guatemala. (2026b). Proyecto 3: Introducción a la Programación y Computación 2, segundo semestre de 2026, versión 1 [Enunciado del curso].
-
-## Anexo A. Modelo de dominio y persistencia
-
-![Figura 1](diagramas/clases.png)
-
-Fuente: elaboración para esta implementación.
-
-## Anexo B. Modelo de comunicación y reportes
-
-![Figura 2](diagramas/clases-web.png)
-
-Fuente: elaboración para esta implementación.
-
-## Anexo C. Actividades de actualización y autorización
-
-![Figura 3](diagramas/actividades.png)
-
-Fuente: elaboración para esta implementación.
-
-## Anexo D. Actividad de consulta y exportación
-
-![Figura 4](diagramas/actividad-reportes.png)
-
-Fuente: elaboración para esta implementación.
-
-## Anexo E. Despliegue del sistema
-
-![Figura 5](diagramas/despliegue.png)
-
-Fuente: elaboración para esta implementación.
